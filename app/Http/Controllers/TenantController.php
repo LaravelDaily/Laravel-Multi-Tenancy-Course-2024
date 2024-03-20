@@ -13,6 +13,7 @@ class TenantController extends Controller
         auth()->user()->update(['current_tenant_id' => $tenant->id]);
 
         // Redirect to dashboard
-        return redirect()->route('dashboard');
+        $tenantDomain = str_replace('://', '://' . $tenant->subdomain . '.', config('app.url'));
+        return redirect($tenantDomain . route('dashboard', absolute: false));
     }
 }

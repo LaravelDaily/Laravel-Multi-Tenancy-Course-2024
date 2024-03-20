@@ -34,6 +34,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'subdomain' => ['required', 'alpha:ascii', 'unique:'.Tenant::class],
         ]);
 
         $user = User::create([
@@ -42,7 +43,10 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $tenant = Tenant::create(['name' => $request->name . ' Team']);
+        $tenant = Tenant::create([
+            'name' => $request->name . ' Team',
+            'subdomain' => $request->subdomain,
+        ]);
         $tenant->users()->attach($user);
         $user->update(['current_tenant_id' => $tenant->id]);
 
@@ -50,6 +54,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $tenantDomain = str_replace('://', '://' . $request->subdomain . '.', config('app.url'));
+        return redirect($tenantDomain . route('dashboard', absolute: false));
     }
 }
