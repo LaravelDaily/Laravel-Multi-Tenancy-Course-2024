@@ -49,6 +49,6 @@ class User extends Authenticatable
 
     public function tenants(): BelongsToMany
     {
-        return $this->belongsToMany(Tenant::class);
+        return $this->belongsToMany(Tenant::class)->withPivot('is_owner');
     }
 }
