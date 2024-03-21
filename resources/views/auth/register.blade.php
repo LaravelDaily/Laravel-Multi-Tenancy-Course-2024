@@ -1,6 +1,9 @@
 <x-guest-layout>
     <form method="POST" action="{{ route('register') }}">
         @csrf
+        @empty(! $invitationEmail)
+            <input type="hidden" name="token" value="{{ request('token') }}">
+        @endempty
 
         <!-- Name -->
         <div>
@@ -12,16 +15,18 @@
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $invitationEmail)" required autocomplete="username" :disabled="! is_null($invitationEmail)" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Subdomain -->
-        <div class="mt-4">
-            <x-input-label for="subdomain" :value="__('Subdomain')" />
-            <x-text-input id="subdomain" class="block mt-1 mr-2 w-full" type="text" name="subdomain" :value="old('subdomain')" required />
-            <x-input-error :messages="$errors->get('subdomain')" class="mt-2" />
-        </div>
+        @empty($invitationEmail)
+            <div class="mt-4">
+                <x-input-label for="subdomain" :value="__('Subdomain')" />
+                <x-text-input id="subdomain" class="block mt-1 mr-2 w-full" type="text" name="subdomain" :value="old('subdomain')" required />
+                <x-input-error :messages="$errors->get('subdomain')" class="mt-2" />
+            </div>
+        @endempty
 
         <!-- Password -->
         <div class="mt-4">

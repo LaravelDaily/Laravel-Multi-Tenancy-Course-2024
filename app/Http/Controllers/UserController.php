@@ -32,16 +32,23 @@ class UserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function acceptInvitation(string $token)
+    public function acceptInvitation(string $token): RedirectResponse
     {
         $invitation = Invitation::where('token', $token)
             ->whereNull('accepted_at')
             ->firstOrFail();
 
         if (auth()->check()) {
-            // assign a user
+            $invitation->update(['accepted_at' => now()]);
+
+            auth()->user()->tenants()->attach($invitation->tenant_id);
+
+            auth()->user()->update(['current_tenant_id' => $invitation->tenant_id]);
+
+            $tenantDomain = str_replace('://', '://' . $invitation->tenant->subdomain . '.', config('app.url'));
+            return redirect($tenantDomain . route('dashboard', absolute: false));
         } else {
-            // redirect to register
+            return redirect()->route('register', ['token' => $invitation->token]);
         }
     }
 }
