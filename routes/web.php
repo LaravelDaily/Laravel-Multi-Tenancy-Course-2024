@@ -11,7 +11,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'tenant'])->group(function () {
     Route::resource('tasks', \App\Http\Controllers\TaskController::class);
     Route::resource('projects', \App\Http\Controllers\ProjectController::class);
 
