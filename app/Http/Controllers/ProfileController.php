@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+use Stancl\Tenancy\Database\Models\Domain;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,6 +50,14 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        foreach ($user->tenants as $tenant) {
+            DB::transaction(function () use ($tenant, $user) {
+                Domain::where('tenant_id', $tenant->id)->delete();
+                $user->tenants()->detach($tenant->id);
+                $tenant->delete();
+            });
+        }
+
         Auth::logout();
 
         $user->delete();
@@ -55,6 +65,6 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return Redirect::to(route('home'));
     }
 }
