@@ -18,6 +18,9 @@
                                     Task name
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left">
+                                    Description
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left">
                                     Project
                                 </th>
                                 <th scope="col" class="px-6 py-3">
@@ -30,6 +33,9 @@
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                         <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                             {{ $task->name }}
+                                        </td>
+                                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                            {{ $task->description }}
                                         </td>
                                         <td class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                             {{ $task->project->name }}

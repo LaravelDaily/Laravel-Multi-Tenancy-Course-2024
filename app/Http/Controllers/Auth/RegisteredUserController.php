@@ -45,9 +45,7 @@ class RegisteredUserController extends Controller
         $tenant = Tenant::create([
             'name' => $request->name,
         ]);
-        $tenant->domains()->create([
-            'domain' => $request->subdomain,
-        ]);
+        $tenant->createDomain($request->subdomain);
         $user->tenants()->attach($tenant->id);
 
         event(new Registered($user));

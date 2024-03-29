@@ -22,16 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        /*$middleware->prepend([
-            // Even higher priority than the initialization middleware
-            \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
-
-//            \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
-            \Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain::class,
-//            \Stancl\Tenancy\Middleware\InitializeTenancyByDomainOrSubdomain::class,
-//            \Stancl\Tenancy\Middleware\InitializeTenancyByPath::class,
-//            \Stancl\Tenancy\Middleware\InitializeTenancyByRequestData::class,
-        ]);*/
+        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

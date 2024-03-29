@@ -16,6 +16,7 @@ class UpdateTaskRequest extends FormRequest
         return [
             'name' => 'required',
             'project_id' => 'required',
+            'description' => 'nullable|string',
         ];
     }
 }
